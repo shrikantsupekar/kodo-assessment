@@ -46,6 +46,15 @@
         </tbody>
       </table>
     </div>
+
+    <div class="pagination">
+      <div></div>
+      <div class="buttons">
+        <button :disabled="!(page > 1)" @click="page--">Prev</button>
+        <span>{{ page }}</span>
+        <button :disabled="!(page < total / 10)" @click="page++">Next</button>
+      </div>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -148,6 +157,30 @@ th {
   width: 300px;
   max-width: 100%;
 }
+
+.pagination {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+.pagination button {
+  padding: 12px;
+  background: blue;
+  color: white;
+  margin-right: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination button:disabled {
+  cursor: crosshair !important;
+  opacity: 0.5 !important;
+}
+.pagination .buttons span {
+  padding: 12px;
+  margin-right: 12px;
+}
 </style>
 <script lang="ts">
 import Vue from "vue";
@@ -168,6 +201,7 @@ export default Vue.extend({
       query: "",
       page: 1,
       sortBy: "",
+      total: 0,
     };
   },
   created() {
@@ -198,6 +232,7 @@ export default Vue.extend({
         })
         .then((res) => {
           this.posts = res.data.posts;
+          this.total = res.data.total;
         });
     },
   },
