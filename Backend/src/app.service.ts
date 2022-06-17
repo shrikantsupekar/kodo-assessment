@@ -5,12 +5,18 @@ import { postsModel } from "./posts.model";
 export class AppService {
   getPosts(
     query: string,
-    skip: number,
-    limit: number
+    page: number,
+    sortBy: string
   ): { posts: Array<postDto>; total: number } {
+    const limit = 10;
+    let skip = ((page || 1) - 1) * limit;
+    let q = new postsModel();
     if (query) {
-      return new postsModel().search(query).skip(skip).limit(limit).get();
+      q = q.search(query);
     }
-    return new postsModel().skip(skip).limit(limit).get();
+    if (sortBy) {
+      q = q.sort(sortBy);
+    }
+    return q.skip(skip).limit(limit).get();
   }
 }

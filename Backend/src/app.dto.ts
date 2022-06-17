@@ -1,12 +1,13 @@
 import {
-  IsBoolean,
+  IsDate,
+  IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
-  IsPhoneNumber,
-  isString,
   IsString,
   IsUrl,
 } from "class-validator";
+import { Type } from "class-transformer";
 
 export class postDto {
   @IsNotEmpty()
@@ -22,6 +23,26 @@ export class postDto {
   description: String;
 
   @IsNotEmpty()
+  @Type(() => Date)
+  @IsDate()
+  dateLastEdited: Date;
+}
+
+enum sortBy {
+  name = "name",
+  dateLastEdited = "dateLastEdited",
+}
+export class queryDto {
+  @IsOptional()
   @IsString()
-  dateLastEdited: String;
+  query: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsEnum(sortBy)
+  sortBy: sortBy;
 }
