@@ -198,31 +198,44 @@ export default Vue.extend({
   data() {
     return {
       posts: [] as Array<Post>,
-      query: "",
-      page: 1,
-      sortBy: "",
-      total: 0,
+      query: "" as string,
+      page: 1 as number,
+      sortBy: "" as string,
+      total: 0 as number,
+      initialized: false,
     };
   },
-  created() {
-    this.loadPosts();
+  async created() {
+    this.page = (parseInt(this.$route.query.page as string) || 1) as number;
+    this.query = (this.$route.query.query || "") as string;
+    this.sortBy = (this.$route.query.sortBy || "") as string;
+
+    await this.loadPosts();
+
+    this.initialized = true;
   },
   watch: {
     query() {
-      this.page = 1;
-      this.loadPosts();
+      if (this.initialized) {
+        this.page = 1;
+
+        if (this.page.toString() === this.$route.query.page) this.loadPosts();
+      }
     },
     sortBy() {
-      this.page = 1;
-      this.loadPosts();
+      if (this.initialized) {
+        this.page = 1;
+
+        if (this.page.toString() === this.$route.query.page) this.loadPosts();
+      }
     },
     page() {
-      this.loadPosts();
+      if (this.initialized) this.loadPosts();
     },
   },
   methods: {
-    loadPosts() {
-      axios
+    async loadPosts() {
+      await axios
         .get("http://localhost:3000", {
           params: {
             page: this.page,
@@ -233,6 +246,23 @@ export default Vue.extend({
         .then((res) => {
           this.posts = res.data.posts;
           this.total = res.data.total;
+        });
+
+      const routeQuery: { page: string; query?: string; sortBy?: string } = {
+        page: this.page.toString(),
+      };
+      if (this.query) routeQuery.query = this.query;
+
+      if (this.sortBy) routeQuery.sortBy = this.sortBy;
+
+      if (
+        routeQuery.page !== this.$route.query.page ||
+        routeQuery.query !== this.$route.query.query ||
+        routeQuery.sortBy !== this.$route.query.sortBy
+      )
+        this.$router.replace({
+          name: "Home",
+          query: routeQuery,
         });
     },
   },
