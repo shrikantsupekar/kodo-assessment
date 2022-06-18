@@ -8,7 +8,7 @@ const posts: Array<postDto> = JSON.parse(data).map((p) => {
 });
 
 export class postsModel {
-  posts: Array<postDto> = posts;
+  posts: Array<postDto> = [...posts];
   skipPosts: number = null;
   limitPosts: number = null;
   search(query, fields = ["name", "description"]): postsModel {

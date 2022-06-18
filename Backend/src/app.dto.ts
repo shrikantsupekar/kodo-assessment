@@ -28,7 +28,7 @@ export class postDto {
   dateLastEdited: Date;
 }
 
-enum sortBy {
+export enum sortBy {
   name = "name",
   dateLastEdited = "dateLastEdited",
 }
