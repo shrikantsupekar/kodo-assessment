@@ -217,9 +217,11 @@ export default Vue.extend({
   watch: {
     query() {
       if (this.initialized) {
-        this.page = 1;
+        debounce(() => {
+          this.page = 1;
 
-        if (this.page.toString() === this.$route.query.page) this.loadPosts();
+          if (this.page.toString() === this.$route.query.page) this.loadPosts();
+        }, 800);
       }
     },
     sortBy() {
@@ -267,4 +269,10 @@ export default Vue.extend({
     },
   },
 });
+
+let debounceTimer: any;
+const debounce = (func: Function, delay: number) => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => func(), delay as number);
+};
 </script>
