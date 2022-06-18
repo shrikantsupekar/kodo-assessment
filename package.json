@@ -1,0 +1,16 @@
+{
+  "name": "codo_assesment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "shrikant <shrikantsupekar96@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "cd Backend && yarn && cd ../Frontend && yarn",
+    "start":"concurrently \"cd Backend && yarn start:dev\" \"cd Frontend && yarn serve\"",
+    "test":"cd Backend && yarn test",
+    "build": "cd Backend && yarn build && cd ../Frontend && yarn build"
+  },
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}
