@@ -16,11 +16,11 @@ export class postsModel {
       return fields.some((field) => {
         return query
           .replace(/"([\s\S]*?)"/, function (s) {
-            return s.replaceAll(" ", "_").replaceAll('"', "");
+            return s.replace(/\s/g, "_").replace(/"/g, "");
           })
           .split(" ")
           .every((term) => {
-            return post[field].indexOf(term.replaceAll("_", " ")) > -1;
+            return post[field].indexOf(term.replace(/_/, " ")) > -1;
           });
       });
     });
